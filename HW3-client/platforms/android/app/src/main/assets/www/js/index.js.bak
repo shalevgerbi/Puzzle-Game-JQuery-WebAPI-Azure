@@ -1,0 +1,105 @@
+﻿(function () {
+    "use strict";
+
+    document.addEventListener('deviceready', onDeviceReady);
+var buttonEmpty = $('button[tabindex=15]');    
+	function onDeviceReady() {
+        var new_tbody = $("<tbody>");
+        var counter = 0;    
+        for (var r = 0; r < 4; r++) {
+            var new_row = $("<tr>");
+            for (var c = 0; c < 4; c++) {
+                var new_cell = $("<td>");
+                var myButton = $('<button>');
+				
+				myButton.text((counter + 1).toString());
+                myButton.attr('tabindex',counter);
+				myButton.css('position','absolute');
+				
+				
+				myButton.attr('class', 'buttonInTable');   		    
+                myButton.appendTo(new_cell);
+	            
+                new_cell.appendTo(new_row);
+                counter ++;
+				
+				
+            }
+            new_row.appendTo(new_tbody);
+        }
+		
+        new_tbody.appendTo($("#myPage"));
+		shuffle();
+	$('button[tabindex=15]').css('visibility','hidden');	
+	
+    };
+	function shuffle(){
+		let i
+		let arr = Array.from(Array(16).keys())
+		for(i=0;i<15;i++){
+				arr[i]=i+1;
+		}		
+		arr[15] = -1;
+		for(i = 14; i > 0;i--){
+			let rand = Math.floor(Math.random() * i);
+			let temp = arr[i]
+			arr[i] = arr[rand];
+			arr[rand] = temp;
+		}
+		var size = 0;
+		for(i = 0;i<16;i++){
+			if (i % 4 == 0)
+                    size ++;
+			
+				$('.buttonInTable[tabindex='+i+']').text(arr[i].toString());
+				var tempButton = $('.buttonInTable[tabindex='+i+']');
+				var colorR = Math.floor((Math.random() * 256)+50);
+				var colorG = Math.floor((Math.random() * 256) +50);
+				var colorB = Math.floor((Math.random() * 256)+50);
+				//tempButton.style.left(100+ (i % 4) * 50 + "px"); 
+				tempButton.css('left',  100+ (i % 4) * 60 + "px"); 
+                tempButton.css('top' , size * 60 + "px");
+				//tempButton.css('right' , 10 + "px");
+				tempButton.css("background-color", "rgb(" + colorR + "," + colorG + "," + colorB + ")");
+				
+				
+			
+		}
+	}
+    $(document).on('click',  'button', function () {
+	var currIndex = $(this).prop("tabindex");
+	 
+	var currText = $('.buttonInTable')[currIndex].innerText;
+	
+    //$(this).animate({ top: '+=60' }, 2000);
+	
+	var unvisibleLeftInt = parseInt(buttonEmpty.css('left'));
+	var unvisibleTopInt = parseInt(buttonEmpty.css('right'));
+	var currLeft = parseInt(this.css('left'));
+	var currTop = parseInt(this.css('top'));
+
+	if (unvisibleLeftInt - currLeft == 50 && unvisibleTopInt - currTop == 0) {
+		//unvisibleButtonLeft = this.css('left');
+		$(this).animate({ left: '+=60' }, 2000);
+
+
+	}
+	else if (unvisibleLeftInt - currLeft == -50 && unvisibleTopInt - currTop == 0) {
+		//unvisibleButtonLeft = button_Clicked.style.left;
+		//intervalID = setInterval(motionLeft, 10);
+		$(this).animate({ right: '+=60' }, 2000);
+	}
+	else if (unvisibleTopInt - currTop == 50 && unvisibleLeftInt - currLeft == 0) {
+		//unvisibleButtonTop = button_Clicked.style.top;
+		//intervalID = setInterval(motionDown, 10);
+		$(this).animate({ top: '+=60' }, 2000);
+	}
+	else if (unvisibleTopInt - currTop == -50 && unvisibleLeftInt - currLeft == 0) {
+//		unvisibleButtonTop = button_Clicked.styFle.top;
+	//	intervalID = setInterval(motionUp, 10);
+	$(this).animate({ bottom: '+=60' }, 2000);
+	}
+
+});
+
+})();
